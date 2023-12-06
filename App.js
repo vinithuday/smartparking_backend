@@ -12,6 +12,8 @@ import Settings from './src/components/Settings';
 import User from './src/components/User';
 import Menu from './src/components/Menu';
 import Notification from './src/components/Notification';
+import QrCode from './src/components/QrCode';
+import ParkingLot from './src/components/ParkingLot';
 
 const Stack = createStackNavigator();
 
@@ -50,6 +52,16 @@ const App = () => {
           <Stack.Screen
           name="notification"
           component={Notification}
+        />
+
+<Stack.Screen
+          name="qrcode"
+          component={QrCode}
+        />
+        
+<Stack.Screen
+          name="parkinglot"
+          component={ParkingLot}
         />
       </Stack.Navigator>
     </NavigationContainer>
