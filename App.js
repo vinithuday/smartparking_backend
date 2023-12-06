@@ -14,6 +14,7 @@ import Menu from './src/components/Menu';
 import Notification from './src/components/Notification';
 import QrCode from './src/components/QrCode';
 import ParkingLot from './src/components/ParkingLot';
+import BookSlot from './src/components/BookSlot';
 
 const Stack = createStackNavigator();
 
@@ -63,7 +64,14 @@ const App = () => {
           name="parkinglot"
           component={ParkingLot}
         />
+
+<Stack.Screen
+          name="bookslot"
+          component={BookSlot}
+        />
       </Stack.Navigator>
+
+      
     </NavigationContainer>
 
     

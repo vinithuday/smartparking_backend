@@ -9,8 +9,8 @@ const Homepage = () => {
   const [searchText, setSearchText] = useState('');
   const navigation = useNavigation();
 
-  const handleParkingLotPress = () => {
-    navigation.navigate('parkinglot');
+  const handleBookSlotPress = () => {
+    navigation.navigate('bookslot');
   };
 
   const handleLocationPress = () => {
@@ -346,7 +346,7 @@ const Homepage = () => {
 
 
 
-      <TouchableOpacity style={styles.ParkingLotButton} onPress={handleParkingLotPress}>
+      <TouchableOpacity style={styles.ParkingLotButton} onPress={handleBookSlotPress}>
         <Text style={styles.ParkingLotText}>Continue</Text> 
       </TouchableOpacity> 
 
@@ -363,7 +363,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   searchBarContainer: {
-    
     alignItems: 'center',
     marginBottom: '130%', 
   },
