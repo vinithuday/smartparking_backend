@@ -386,11 +386,13 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 17,
+    
   },
   selectSpaceText: {
     marginTop: 20,
-    fontSize: 20,
     textAlign: 'center',
+    fontSize: 22,
+    color: '#38447E',
   },
   ParkingLotButton: {
     width: '70%',
@@ -427,7 +429,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    left: 250,
+    left: 240,
     top: 350,
   },
   rowthree: {
@@ -441,7 +443,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    left: 250,
+    left: 240,
     top: 420,
   },
   rowfive: {
@@ -455,7 +457,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    left: 250,
+    left: 240,
     top: 490,
   },
   rowseven: {
@@ -469,7 +471,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    left: 250,
+    left: 240,
     top: 560,
   },
   carIcon: {
