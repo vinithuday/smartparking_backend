@@ -12,7 +12,7 @@ const Footer = () => {
 
   // Handle the Home icon press to navigate to the "homepage" screen
   const handleHomePress = () => {
-    navigation.navigate('homepage');
+    navigation.navigate('map');
   };
 
   // Handle the User Profile icon press to navigate to the "user profile" screen
