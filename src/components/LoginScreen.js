@@ -1,13 +1,53 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet,Image, StatusBar } from 'react-native';
+import axios from 'axios';
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Your login logic here
-  };
+  // const handleLogin = async () => {
+  //   try {
+  //     const response = await axios.post('http://your-backend-url/api/auth/login', {
+  //       email,
+  //       password,
+  //     });
+
+  //     // Handle success: store tokens, navigate to the next screen, etc.
+  //     console.log('Login successful:', response.data);
+  //   } catch (error) {
+  //     // Handle error: display error message to the user
+  //     console.error('Login failed:', error.response.data);
+  //   }
+  // };
+  
+
+
+  const handleLogin = async () => {
+  try {
+    const response = await axios.post('http://127.0.0.1:3000/api/auth/login', {
+      email,
+      password,
+    });
+
+    // Handle success: store tokens, navigate to the next screen, etc.
+    console.log('Login successful:', response.data);
+  } catch (error) {
+    if (error.response) {
+      // The request was made, and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.error('Login failed with status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    } else if (error.request) {
+      // The request was made, but no response was received
+      console.error('No response received from the server');
+      console.error('Request details:', error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error during request setup:', error.message);
+    }
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -34,7 +74,7 @@ export default function LoginScreen(props) {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.loginBtn}  onPress={() => props.navigation.navigate("homepage")}>
+      <TouchableOpacity style={styles.loginBtn}  onPress={() => props.navigation.navigate("map")}>
         <Text style={styles.loginText}>LOGIN</Text> 
       </TouchableOpacity>
 

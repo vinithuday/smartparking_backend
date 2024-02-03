@@ -1,17 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  StatusBar,
-} from "react-native";
+import { StripeProvider } from '@stripe/stripe-react-native';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
-// Import your screen components here
 import LoginScreen from "./src/components/LoginScreen";
 import SignupScreen from "./src/components/SignupScreen";
 import ForgotPassword from "./src/components/ForgotPassword";
@@ -24,28 +17,48 @@ import QrCode from "./src/components/QrCode";
 import ParkingLot from "./src/components/ParkingLot";
 import BookSlot from "./src/components/BookSlot";
 import Map from "./src/components/Map";
+import Payment from "./src/components/Payment";
+import PayPalScreen from "./src/components/PayPalScreen";
 
 const Stack = createStackNavigator();
+const stripePromise = loadStripe('sk_test_51Of6H3JdJTq4rwlvmBGPwi50oYx19HaSjU8bmDf6B9PZwIDF489MHOL9FMNMyfLs6bCDsKyoCa30RSCnFwBKeMoX00EFDOdXJs');
 
 const App = () => {
+  const [publishableKey, setPublishableKey] = useState('');
+
+  useEffect(() => {
+    fetchPublishableKey();
+  }, []);
+
+  const fetchPublishableKey = async () => {
+    const key = await fetchKey();
+    setPublishableKey(key);
+  };
+
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="signup" component={SignupScreen} />
-        <Stack.Screen name="forgotpassword" component={ForgotPassword} />
-        <Stack.Screen name="homepage" component={Homepage} />
-        <Stack.Screen name="settings" component={Settings} />
-        <Stack.Screen name="user" component={User} />
-        <Stack.Screen name="menu" component={Menu} />
-        <Stack.Screen name="notification" component={Notification} />
-        <Stack.Screen name="qrcode" component={QrCode} />
-        <Stack.Screen name="parkinglot" component={ParkingLot} />
-        <Stack.Screen name="bookslot" component={BookSlot} />
-        <Stack.Screen name="map" component={Map} />
-      </Stack.Navigator>
-
-     
+      <StripeProvider
+        publishableKey={publishableKey}
+        merchantIdentifier="merchant.identifier" 
+        urlScheme="your-url-scheme" 
+      >
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="login" component={LoginScreen} />
+          <Stack.Screen name="signup" component={SignupScreen} />
+          <Stack.Screen name="forgotpassword" component={ForgotPassword} />
+          <Stack.Screen name="homepage" component={Homepage} />
+          <Stack.Screen name="settings" component={Settings} />
+          <Stack.Screen name="user" component={User} />
+          <Stack.Screen name="menu" component={Menu} />
+          <Stack.Screen name="notification" component={Notification} />
+          <Stack.Screen name="qrcode" component={QrCode} />
+          <Stack.Screen name="parkinglot" component={ParkingLot} />
+          <Stack.Screen name="bookslot" component={BookSlot} />
+          <Stack.Screen name="map" component={Map} />
+          <Stack.Screen name="payment" component={Payment} />
+          <Stack.Screen name="paypalscreen" component={PayPalScreen} />
+        </Stack.Navigator>
+      </StripeProvider>
     </NavigationContainer>
   );
 };

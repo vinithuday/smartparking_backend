@@ -1,14 +1,40 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
+import axios from 'axios';
 
 export default function SignupScreen(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = () => {
-    // Your sign-up logic here
+  const handleSignUp = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:3000/api/auth/register', {
+        email,
+        password,
+        confirmPassword,
+      });
+  
+      if (response.data.message === 'Registration successful') {
+        console.log('Signup successful:', response.data.message);
+      } else {
+        console.error('Signup failed:', response.data.message);
+      }
+    } catch (error) {
+      if (error.response) {
+ 
+        console.error('Signup failed with status:', error.response.status);
+        console.error('Response data:', error.response.data);
+      } else if (error.request) {
+        console.error('No response received from the server');
+        console.error('Request details:', error.request);
+      }
+       else {
+        console.error('Error during request setup:', error.message);
+      }
+    }
   };
+  
 
   return(
 
@@ -42,7 +68,7 @@ export default function SignupScreen(props) {
       />
     </View>
 
-    <TouchableOpacity style={styles.signupBtn}>
+    <TouchableOpacity style={styles.signupBtn} onPress={handleSignUp}>
       <Text style={styles.signupText} >Create Account</Text> 
     </TouchableOpacity>
 

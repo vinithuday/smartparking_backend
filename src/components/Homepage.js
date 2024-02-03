@@ -1,13 +1,16 @@
-
 import React, { useState } from 'react';
 import { View, Image, TouchableOpacity, Text, TextInput, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Header from './Header';
 import Footer from './Footer';
-const Homepage = () => {
+import DropdownComponent from './Dropdown';
+
+const Homepage = ({route}) => {
   const [searchText, setSearchText] = useState('');
+  const [selectedSpace, setSelectedSpace] = useState(null);
   const navigation = useNavigation();
-  // const [slotCounter, setSlotCounter] = useState(1);
+  const { location } = route.params;
+
 
   const handleBookSlotPress = (slot, event) => {
     event.persist();
@@ -25,12 +28,8 @@ const Homepage = () => {
       <TouchableOpacity key={slotName} onPress={(event) => handleBookSlotPress(slotName, event)}>
         <View style={styles.squareone}>
           <View style={styles.carIcon}>
-            <Image
-              source={require('../../assets/Car.png')}
-              style={{ width: 25, height: 25 }}
-            />
-           <Text style={styles.slotText}>{slotName}</Text>
-
+            <Image source={require('../../assets/Car.png')} style={{ width: 25, height: 25 }} />
+            <Text style={styles.slotText}>{slotName}</Text>
           </View>
         </View>
       </TouchableOpacity>
@@ -43,80 +42,64 @@ const Homepage = () => {
     </View>
   );
 
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${searchText}`
-      );
-
-      if (response.data.length > 0) {
-        const { lat, lon } = response.data[0];
-        setMapRegion({
-          latitude: parseFloat(lat),
-          longitude: parseFloat(lon),
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        });
-        setMarkerCoordinate({ latitude: parseFloat(lat), longitude: parseFloat(lon) });
-      }
-    } catch (error) {
-      console.error('Error while geocoding:', error);
-    }
-  };
-
+  // const handleSearch = async () => {
+  // };
 
   return (
     <View style={styles.container}>
       <Header />
 
-      <TextInput
+      {/* <TextInput
         style={styles.searchBar}
         placeholder="Search..."
         value={searchText}
-        onChangeText={text => setSearchText(text)}
+        onChangeText={(text) => setSearchText(text)}
         onSubmitEditing={handleSearch}
-      />
-        <Text style={styles.selectSpaceText}>Select Preferred Space</Text>
-      
+      /> */}
+
+      <Text style={styles.selectSpaceText}>Select Preferred Space</Text>
+<View style={styles.dropdown}>
+      <DropdownComponent/>
+      </View>
+
       {renderRow(0)}
       {renderRow(1)}
       {renderRow(2)}
       {renderRow(3)}
-      {/* Add more rows if needed */}
+      {renderRow(4)}
+      {renderRow(5)}
 
       <Footer />
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'#ffff',
+    backgroundColor: '#ffff',
   },
-  searchBar: {
-    height: 45,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 8,
-    margin: 10,
-    paddingLeft: 10,
-    position: 'absolute',
-    top: 130, 
-    left: 50,
-    right: 50,
-    zIndex: 1,
-    backgroundColor: 'white', 
-  },
-
+  // searchBar: {
+  //   height: 45,
+  //   borderColor: 'gray',
+  //   borderWidth: 1,
+  //   borderRadius: 8,
+  //   margin: 10,
+  //   paddingLeft: 10,
+  //   position: 'absolute',
+  //   top: 130,
+  //   left: 50,
+  //   right: 50,
+  //   zIndex: 1,
+  //   backgroundColor: 'white',
+  // },
   selectSpaceText: {
     fontSize: 25,
     fontWeight: 'bold',
-    color: "#38447E",
+    color: '#38447E',
     bottom: 30,
-  
-
   },
   squareone: {
     width: 50,
@@ -136,22 +119,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 20,
   },
-  searchBar: {
-    height: 45,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 8,
-    margin: 10,
-    paddingLeft: 10,
-    position: 'absolute',
-    top: 130, 
-    left: 50,
-    right: 50,
-    zIndex: 1,
-    backgroundColor: 'white', 
+  dropdownContainer: {
+    height: 40,
+    width: '80%',
+    marginTop: 10,
+  },
+  dropdownStyle: {
+    backgroundColor: '#fafafa',
+  },
+  dropdownItemStyle: {
+    justifyContent: 'flex-start',
+  },
+  dropdownLabelStyle: {
+    color: '#38447E',
+  },
+  slotText: {
+    fontSize: 12,
+    color: '#38447E',
+    marginTop: 5,
   },
 });
 
 export default Homepage;
-
-
