@@ -23,7 +23,7 @@ const uri = "mongodb+srv://vinithrajbmu:qudhjTs3QVjSjGJQ@cluster0.sginhlx.mongod
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
-    strict: true,
+    strict: false,
     deprecationErrors: true,
   }
 });
