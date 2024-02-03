@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
 const authRoutes = require('./routes/authRoutes');
-const cors = require('cors'); 
+// const cors = require('cors'); 
 
 
 const app = express();
@@ -43,7 +43,7 @@ run().catch(console.dir);
 
 app.use(express.json());
 
-app.use(cors());
+// app.use(cors());
 
 
 app.use('/api/auth', authRoutes);
