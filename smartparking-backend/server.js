@@ -4,21 +4,48 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
 const authRoutes = require('./routes/authRoutes');
-// const cors = require('cors'); 
+const cors = require('cors'); 
 
 
 const app = express();
 
-// mongoose.connect('mongodb://127.0.0.1:27017/smartparking')
-//   .then(() => {
-//     console.log('Connected to MongoDB');
+mongoose.connect('mongodb://127.0.0.1:27017/smartparking')
+  .then(() => {
+    console.log('Connected to MongoDB');
 
-//   })
-//   .catch((error) => {
-//     console.error('Error connecting to MongoDB:', error);
-//   });
+  })
+  .catch((error) => {
+    console.error('Error connecting to MongoDB:', error);
+  });
+
+const stripe = require('stripe')('sk_test_51Of6H3JdJTq4rwlvmBGPwi50oYx19HaSjU8bmDf6B9PZwIDF489MHOL9FMNMyfLs6bCDsKyoCa30RSCnFwBKeMoX00EFDOdXJs');
+
+app.post('/payment-sheet', async (req, res) => {
+  const customer = await stripe.customers.create();
+  const ephemeralKey = await stripe.ephemeralKeys.create(
+    {customer: customer.id},
+    {apiVersion: '2023-10-16'}
+  );
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 1099,
+    currency: 'eur',
+    customer: customer.id,
+
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  res.json({
+    paymentIntent: paymentIntent.client_secret,
+    ephemeralKey: ephemeralKey.secret,
+    customer: customer.id,
+    publishableKey: 'pk_test_51Of6H3JdJTq4rwlvgr7ZKl9zgO3Yb9BsHXsulD3Rm8EfttFTYQJ3PGY5OEAd9wrnfealZRR59RDELocfqtPmufcV005iOZ9Ioz'
+  });
+});
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://vinithrajbmu:qudhjTs3QVjSjGJQ@cluster0.sginhlx.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://vinithrajbmu:mNOJUT3pyR2o0klU@cluster0.sginhlx.mongodb.net/?retryWrites=true&w=majority";
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
