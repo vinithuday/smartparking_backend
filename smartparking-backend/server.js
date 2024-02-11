@@ -4,7 +4,10 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const User = require('./models/User');
 const authRoutes = require('./routes/authRoutes');
+const parkingLocationRoute = require('./routes/parkingLocationRoute');
+const userReservationRoute = require('./routes/userReservationRoute');
 const cors = require('cors'); 
+
 
 
 const app = express();
@@ -74,6 +77,8 @@ app.use(cors());
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api', parkingLocationRoute);
+app.use('/api', userReservationRoute);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
