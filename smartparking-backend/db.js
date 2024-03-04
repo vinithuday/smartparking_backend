@@ -1,19 +1,3 @@
-// const mongoose = require("mongoose");
-
-// module.exports = (collectionName) => {
-// 	const connectionParams = {
-// 		useNewUrlParser: true,
-// 		useUnifiedTopology: true,
-// 	};
-// 	const dbUrl = process.env.DB || "mongodb://localhost:27017/";
-// 	try {
-// 		mongoose.connect(`${dbUrl}${collectionName}`, connectionParams);
-// 		console.log("Connected to database successfully");
-// 	} catch (error) {
-// 		console.log(error);
-// 		console.log("Could not connect database!");
-// 	}
-// };
 const mongoose = require("mongoose");
 
 const connectionParams = {
