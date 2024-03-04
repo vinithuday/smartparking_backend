@@ -1,12 +1,7 @@
-
-
-const mongoose = require('mongoose');
+const { string } = require("joi");
+const mongoose = require("mongoose");
 
 const userReservationSchema = new mongoose.Schema({
-    reservation_id: {
-        type: Number,
-        required: true,
-      },
   email: {
     type: String,
     required: true,
@@ -17,34 +12,29 @@ const userReservationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  parkingSlot:{
+  selectedSlot: {
     type: String,
     required: true,
   },
-  arrivalDate: {
-    type: Date,
-    required: true,
-  },
   arrivalTime: {
-    type: Date,
+    type: String,
     required: true,
   },
-  departureDate: {
-    type: Date,
-    required: true,
-  },
+
   departureTime: {
+    type: String,
+    required: true,
+  },
+  totalPrice: {
+    type: String,
+    required: true,
+  },
+  chosenDate: {
     type: Date,
     required: true,
   },
- 
-  totalPrice: {
-    type: Number,
-    required: true,
-  },
- 
 });
 
-const Reservation = mongoose.model('userReservation', userReservationSchema);
+const Reservation = mongoose.model("userReservation", userReservationSchema);
 
 module.exports = Reservation;
