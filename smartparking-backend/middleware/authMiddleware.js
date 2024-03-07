@@ -9,12 +9,12 @@ const router = require("../routes/auth");
 	 try {
     const jwtSecret = process.env.JWTPRIVATEKEY || "";
     const decoded = jwt.verify(req.body.jwt, jwtSecret);
-    console.log("User" + decoded._id)
+    // console.log("User" + decoded._id)
     const user = await User1.findById(mongoose.Types.ObjectId(decoded._id)
     );
-    console.log(user)
+    //console.log(user)
     if (!user) {
-      console.log('User not found');
+      //console.log('User not found');
     } else {
       console.log('User found:', user);
       res.status(200).send({ data: {

@@ -4,14 +4,14 @@ const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
 const userSchema = new mongoose.Schema({
-  _id: { type: String, required: false },
-  email: { type: String, required: false },
+  // _id: { type: String, required: false },
+  email: { type: String, required: true, unique:true },
   password: { type: String, required: false },
-}, { versionKey: false });
+});
 
 userSchema.methods.generateAuthToken = function () {
-  const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
-    expiresIn: "60d",
+  const token = jwt.sign({ email: this.email }, process.env.JWTPRIVATEKEY, {
+    expiresIn: "1h",
   });
   return token;
 };
