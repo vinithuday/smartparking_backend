@@ -9,12 +9,14 @@ router.post("/", async (req, res) => {
     const reservedSlots= await userReservation.find({location:location,})
         let blockedSlots=[];
         for(let i=0; i<reservedSlots.length;i++){
-          if (arrivalDateTime >= reservedSlots[i].arrivalDateTime && departureTime<=reservedSlots[i].departureTime ||
-            reservedSlots[i].departureTime>=arrivalDateTime||
-            reservedSlots[i].arrivalDateTime>=departureTime){
-            blockedSlots.push(reservedSlots[i].selectedSlot)
-          } 
-        }
+          if (
+        (arrivalDateTime >= reservedSlots[i].arrivalDateTime && arrivalDateTime < reservedSlots[i].departureTime) ||
+        (departureTime > reservedSlots[i].arrivalDateTime && departureTime <= reservedSlots[i].departureTime) ||
+        (arrivalDateTime <= reservedSlots[i].arrivalDateTime && departureTime >= reservedSlots[i].departureTime)
+      ) {
+        blockedSlots.push(reservedSlots[i].selectedSlot);
+      }
+    }
     return res.status(201).json({ data:blockedSlots});
   } catch (error) {
     console.error("Error during reservation:", error);
