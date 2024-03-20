@@ -1,5 +1,4 @@
 const router = require("express").Router();
-// const { User } = require("../models/user1");
 const { User1, validate } = require("../models/user1");
 const bcrypt = require("bcrypt");
 const {connectToCollection,disconnectFromCollection} = require("../db");

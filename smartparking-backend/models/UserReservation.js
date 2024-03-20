@@ -15,33 +15,32 @@ const userReservationSchema = new mongoose.Schema({
   selectedSlot: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
 
   },
-  arrivalTime: {
+  arrivalDateTime: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
 
+  },
+  qrCodeValue:{
+    type: String,
+    required: true,
+    unique: false,
   },
   
   departureTime: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
 
   },
   totalPrice: {
     type: Number,
     required: true,
     
-  },
-  chosenDate: {
-    type: Date,
-    required: true,
-    unique: true,
-
-  },
+  }
  
 });
 

@@ -1,4 +1,3 @@
-// console.log(require('crypto').randomBytes(128).toString('hex'))
 const handleSubmit = async (e) => {
     e.preventDefault();
     try {

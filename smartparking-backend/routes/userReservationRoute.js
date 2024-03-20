@@ -4,41 +4,39 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
+    console.log(req.body);
     const {
       email,
       location,
       selectedSlot,
-      chosenDate,
-      arrivalTime,
+      arrivalDateTime,
       departureTime,
       totalPrice,
+      qrCodeValue,
     } = req.body;
 
-    
     if (
       !email ||
-      !chosenDate ||
-      !arrivalTime ||
+      !arrivalDateTime ||
       !departureTime ||
       !totalPrice ||
       !selectedSlot ||
-      !location
+      !location ||
+      !qrCodeValue
     ) {
-      return res
-        .status(400)
-        .json({
-          message: "Invalid request. Please provide all required data.",
-        });
+      return res.status(400).json({
+        message: "Invalid request. Please provide all required data.",
+      });
     }
 
     const newUserReservation = new userReservation({
       email,
       location,
       selectedSlot,
-      chosenDate,
-      arrivalTime,
+      arrivalDateTime,
       departureTime,
       totalPrice,
+      qrCodeValue,
     });
 
     await newUserReservation.save();
@@ -49,4 +47,5 @@ router.post("/", async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 });
+
 module.exports = router;

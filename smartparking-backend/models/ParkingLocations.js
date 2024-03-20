@@ -1,15 +1,14 @@
-
-
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const parkingLocationsSchema = new mongoose.Schema({
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
-  name: {type: String}
+  name: { type: String },
 });
 
-const ParkingLocations = mongoose.model('ParkingLocation', parkingLocationsSchema);
+const ParkingLocations = mongoose.model(
+  "ParkingLocation",
+  parkingLocationsSchema
+);
 
 module.exports = ParkingLocations;
-
-

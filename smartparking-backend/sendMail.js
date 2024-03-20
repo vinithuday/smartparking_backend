@@ -1,28 +1,31 @@
-
-const express = require('express');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const { MongoClient } = require('mongodb');
-const cors = require('cors');
-require('dotenv').config();
-
+const express = require("express");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
+const { MongoClient } = require("mongodb");
+const cors = require("cors");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+bcrypt = require("bcrypt");
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = 'mongodb://localhost:27017/smartparking/';
+const uri = "mongodb://localhost:27017/smartparking/";
 const client = new MongoClient(uri);
 
-client.connect().then(() => {
-  console.log('Connected to the database');
-}).catch(err => {
-  console.error('Error connecting to the database', err);
-  process.exit(1);
-});
+client
+  .connect()
+  .then(() => {
+    console.log("Connected to the database");
+  })
+  .catch((err) => {
+    console.error("Error connecting to the database", err);
+    process.exit(1);
+  });
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
+  service: "gmail",
+  host: "smtp.gmail.com",
   port: 587,
   secure: false,
   auth: {
@@ -33,30 +36,31 @@ const transporter = nodemailer.createTransport({
 
 const passwordResetTokens = new Map();
 
-app.post('/forgotpassword', async (req, res) => {
-
- 
-  
+function gernrateToken(email) {
+  const token = jwt.sign({ email: email }, process.env.JWTPRIVATEKEY, {
+    expiresIn: "0.15h",
+  });
+  return token;
+}
+app.post("/forgotpassword", async (req, res) => {
   try {
-
-    const db = client.db('smartparking');
-    const usersCollection = db.collection('users');
+    const db = client.db("smartparking");
+    const usersCollection = db.collection("users");
 
     const user = await usersCollection.findOne({ email: req.body.email });
-    console.log(user)
     if (!user) {
-      return res.status(404).send('User not found');
+      return res
+        .status(200)
+        .send("Password reset email sent to given id if the account exist");
     }
-    let email=req.body.email
-    console.log(email)
-    const token = crypto.randomBytes(20).toString('hex');
-    passwordResetTokens.set(token, { email, timestamp: Date.now() });
+    let email = req.body.email;
+    const token = gernrateToken(email);
 
-    const resetLink = `http://192.168.0.28:4000/resetpassword?token=${token}`;
+    const resetLink = `http://localhost:3001/resetpassword/${token}`;
     const mailOptions = {
-      from: 'smartparkingmannheim@gmail.com',
+      from: "smartparkingmannheim@gmail.com",
       to: email,
-      subject: 'Password Reset',
+      subject: "Password Reset",
       html: `<!DOCTYPE html>
         <html lang="en">
         <body style="font-family: Arial, sans-serif;">
@@ -71,36 +75,28 @@ app.post('/forgotpassword', async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
-    res.status(200).send('Password reset email sent')
- 
-  }  catch (error) {
-    console.error('Error processing forgot password request:', error);
-    res.status(500).send({message:'Internal Server Error'});
+    res
+      .status(200)
+      .send("Password reset email sent to given id if the account exist");
+  } catch (error) {
+    console.error("Error processing forgot password request:", error);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 
-app.post('/resetpassword', (req, res) => {
-  console.log("hi")
+app.post("/resetpassword", async (req, res) => {
   const { token, newPassword } = req.body;
-
-  const resetInfo = passwordResetTokens.get(token);
-
-  if (!resetInfo || Date.now() - resetInfo.timestamp > 3600000) {
-    return res.status(400).send('Invalid or expired token');
-  }
-
-  const db = client.db('smartparking');
-  const usersCollection = db.collection('users');
-
-  usersCollection.updateOne({ email: resetInfo.email }, { $set: { password: newPassword } })
-    .then(() => {
-      passwordResetTokens.delete(token);
-      res.send('Password reset successful');
-    })
-    .catch((error) => {
-      console.error('Error processing forgot password request:', error);
-      res.status(500).send('Internal Server Error');
-    });
+  const db = client.db("smartparking");
+  const usersCollection = db.collection("users");
+  const jwtSecret = process.env.JWTPRIVATEKEY || "";
+  const decoded = jwt.verify(token, jwtSecret);
+  const salt = await bcrypt.genSalt(Number(process.env.SALT));
+  const hashPassword = await bcrypt.hash(newPassword, salt);
+  usersCollection.updateOne(
+    { email: decoded.email },
+    { $set: { password: hashPassword } }
+  );
+  res.status(200).send("Password reset successful");
 });
 
 const port = process.env.PORT || 4000;

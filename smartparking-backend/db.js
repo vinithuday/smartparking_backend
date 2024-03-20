@@ -10,7 +10,6 @@ const connectToCollection = (collectionName) => {
 	console.log(`${dbUrl} collection address`)
   mongoose.connect(`${dbUrl}`, connectionParams);
 
-  // Connection events
   mongoose.connection.on('connected', () => {
     console.log(`Connected to MongoDB collection: ${collectionName}`);
   });

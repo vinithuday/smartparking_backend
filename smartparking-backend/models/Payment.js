@@ -11,7 +11,6 @@ const paymentSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  // Add more fields as needed
 });
 
 const Payment = mongoose.model("Payment", paymentSchema);
